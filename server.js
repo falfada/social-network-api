@@ -1,0 +1,14 @@
+const express = require('express');
+const db = require('./config/connection.js');
+const routes = require('./routes');
+
+const PORT = 3001;
+const app = express();
+
+app.use(routes);
+
+db.once('open', () => {
+    app.listen(PORT, () => {
+        console.log(`Server is running in PORT ${PORT}`);
+    })
+});
