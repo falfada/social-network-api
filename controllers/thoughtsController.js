@@ -44,7 +44,7 @@ module.exports = {
       }
       res.json({message: 'Thought updated', data: thoughtUpdated});
     } catch(err){
-      res.status(500).json({message: erro.message});
+      res.status(500).json({message: err.message});
     }
   },
   // Delete thought
