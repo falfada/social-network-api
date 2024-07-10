@@ -13,7 +13,6 @@ connection.once("open", async () => {
   // Seeding thoughts
   await Thought.deleteMany({});
   const insertedThoughts = await Thought.insertMany(thoughts);
-  console.log(insertedThoughts);
 
   // Assigning thoughts to users
   for (const thought of insertedThoughts) {
