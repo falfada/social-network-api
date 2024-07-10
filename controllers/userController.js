@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Thought } = require("../models");
 
 module.exports = {
   // Get all Users
@@ -11,51 +11,66 @@ module.exports = {
     }
   },
   // Create new user
-  async createUser(req, res){
-    try{
+  async createUser(req, res) {
+    try {
       const newUser = await User.create(req.body);
-      res.json({message: 'User created successfully', data: newUser});
-    } catch(err){
+      res.json({ message: "User created successfully", data: newUser });
+    } catch (err) {
       res.status(500).json(err);
     }
   },
   // Get single User
-  async getSingleUser(req, res){
-    try{
-      const singleUser = await User.findById(req.params.id).populate('thoughts').populate('friends');
-      if(!singleUser){
-        return res.status(404).json({message: 'User not found'});
+  async getSingleUser(req, res) {
+    try {
+      const singleUser = await User.findById(req.params.id)
+        .populate("thoughts")
+        .populate("friends");
+      if (!singleUser) {
+        return res.status(404).json({ message: "User not found" });
       }
       res.json(singleUser);
-    } catch(err){
+    } catch (err) {
       res.status(500).json(err);
     }
   },
   // Update User
-  async updateUser(req, res){
-    try{
+  async updateUser(req, res) {
+    try {
       const userToUpdate = req.params.id;
       const infoToUpdate = req.body;
-      const updatedUser = await User.findByIdAndUpdate(userToUpdate, infoToUpdate, {new: true});
-      if(!updatedUser){
-        return res.status(404).json({message: 'User not found'});
+      const updatedUser = await User.findByIdAndUpdate(
+        userToUpdate,
+        infoToUpdate,
+        { new: true }
+      );
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
       }
-      res.json({message: 'User updated', data: updatedUser});
-    } catch(err){
+      res.json({ message: "User updated", data: updatedUser });
+    } catch (err) {
       res.status(500).json(err);
     }
   },
   // Delete User
-  async deleteUser(req, res){
-    try{
+  async deleteUser(req, res) {
+    try {
       const userId = req.params.id;
+      const user = await User.findOne({ _id: userId });
+      // Deleting associated thoughts
+      const thoughts = user.thoughts;
+      const thoughtIds = thoughts.map((thought) => thought._id);
+      const thoughtsToDelete = await Thought.deleteMany({
+        _id: { $in: thoughtIds },
+      });
+
+      // Deleting user
       const userToDelete = await User.findByIdAndDelete(userId);
-      if(!userToDelete){
-        return res.status(404).json({message: 'User not found'});
+      if (!userToDelete) {
+        return res.status(404).json({ message: "User not found" });
       }
-      res.json({message: 'User deleted', data: userToDelete});
-    } catch(err){
+      res.json({ message: "User deleted", data: userToDelete });
+    } catch (err) {
       res.status(500).json(err);
     }
-  }
+  },
 };

@@ -25,7 +25,8 @@ const thoughts = [
     },
     {
         thoughtText: "Stepping carefully to avoid causing a ruckus. 👣🌳",
-        username: "george_giant"
+        username: "george_giant",
+        userId: ""
     },
     {
         thoughtText: "Sharp eyes on the horizon, watching the world go by. 🦅🌄",
@@ -33,7 +34,8 @@ const thoughts = [
     },
     {
         thoughtText: "Staying cool and composed, even under pressure. ❄️🧊",
-        username: "ian_iceberg"
+        username: "ian_iceberg",
+        userId: ""
     },
     {
         thoughtText: "Every gem has its own unique sparkle. 💎✨",
